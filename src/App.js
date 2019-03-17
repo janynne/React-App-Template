@@ -1,28 +1,39 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
+import './App.scss';
+import * as userService from './services/user';
+import { Header } from './components/header';
+import { Footer } from './components/footer';
+import Routes from './routes';
 
 class App extends Component {
+
+  state = { 
+    showSomething: false,
+    username:''
+   };
+
+
+  onClick = () => {
+    userService.changeUserName('Janynne');
+    userService.authenticate({username: 'marcelo'});
+    userService.setState({roles: ['admin']});
+    this.setState({ username:'marcelo'});
+
+  }
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+        <Header/>
+        <Routes/>
+        <Footer/>
       </div>
     );
   }
 }
+const mapStateToProps = (state) => ({
+  ...state
+});
 
-export default App;
+export default  withRouter(connect(mapStateToProps)(App));
